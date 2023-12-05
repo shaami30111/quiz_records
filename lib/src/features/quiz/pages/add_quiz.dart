@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quiz_records/common_widgets/async_value_ui.dart';
-import 'package:quiz_records/localization/string_hardcoded.dart';
+import 'package:quiz_records/src/common_widgets/async_value_ui.dart';
+import 'package:quiz_records/src/localization/string_hardcoded.dart';
 
 import '../controller/quiz_controller.dart';
 import '../widgets/quiz_validator.dart';

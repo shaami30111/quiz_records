@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quiz_records/localization/string_hardcoded.dart';
+import 'package:quiz_records/src/localization/string_hardcoded.dart';
 
 import '../constants/app_sizes.dart';
 import '../routing/routing.dart';

@@ -10,7 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'firebase_options.dart';
-import 'routing/routing.dart';
+import 'src/routing/routing.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

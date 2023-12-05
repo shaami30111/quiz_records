@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_records/localization/string_hardcoded.dart';
+import 'package:quiz_records/src/localization/string_hardcoded.dart';
 
 import '../../common_widgets/empty_placeholder.dart';
 

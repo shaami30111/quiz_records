@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quiz_records/localization/string_hardcoded.dart';
+import 'package:quiz_records/src/localization/string_hardcoded.dart';
 
-import '../../../../../common_widgets/empty_placeholder.dart';
+import '../../../../../src/common_widgets/empty_placeholder.dart';
 import '../model/quiz.dart';
 
 import '../repositories/quiz_repository.dart';

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:quiz_records/localization/string_hardcoded.dart';
+import 'package:quiz_records/src/localization/string_hardcoded.dart';
 
 const kDialogDefaultKey = Key('dialog-default-key');
 

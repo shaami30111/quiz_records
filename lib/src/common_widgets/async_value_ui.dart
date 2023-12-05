@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quiz_records/localization/string_hardcoded.dart';
+import 'package:quiz_records/src/localization/string_hardcoded.dart';
 
 import '../exceptions/app_exception.dart';
 import 'alert_dialogs.dart';

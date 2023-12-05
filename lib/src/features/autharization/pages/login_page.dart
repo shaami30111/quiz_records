@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quiz_records/constants/app_sizes.dart';
-import 'package:quiz_records/features/autharization/controller/auth_controller.dart';
-import 'package:quiz_records/features/autharization/model/auth_model.dart';
-import 'package:quiz_records/localization/string_hardcoded.dart';
+import 'package:quiz_records/src/constants/app_sizes.dart';
+import 'package:quiz_records/src/features/autharization/controller/auth_controller.dart';
+import 'package:quiz_records/src/features/autharization/model/auth_model.dart';
+import 'package:quiz_records/src/localization/string_hardcoded.dart';
 
 import '../../../routing/routing.dart';
 

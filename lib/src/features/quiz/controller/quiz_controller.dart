@@ -1,5 +1,5 @@
-import 'package:quiz_records/features/quiz/repositories/quiz_repository.dart';
-import 'package:quiz_records/routing/routing.dart';
+import 'package:quiz_records/src/features/quiz/repositories/quiz_repository.dart';
+import 'package:quiz_records/src/routing/routing.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/quiz.dart';

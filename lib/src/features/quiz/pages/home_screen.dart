@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quiz_records/common_widgets/async_value_ui.dart';
-import 'package:quiz_records/localization/string_hardcoded.dart';
+import 'package:quiz_records/src/common_widgets/async_value_ui.dart';
+import 'package:quiz_records/src/localization/string_hardcoded.dart';
 
 import '../../../common_widgets/empty_placeholder.dart';
 import '../controller/quiz_controller.dart';
