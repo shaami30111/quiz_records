@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "413821381246",
+    "firebase_url": "https://quiz-records-68b7d-default-rtdb.firebaseio.com",
+    "project_id": "quiz-records-68b7d",
+    "storage_bucket": "quiz-records-68b7d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:413821381246:android:b30d04bd22bc1e5967062f",
+        "android_client_info": {
+          "package_name": "com.example.quiz_records"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT8BrfeqlAnmj10jdp23EmXIj20eidDY4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
