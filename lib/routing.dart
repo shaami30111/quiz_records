@@ -18,7 +18,7 @@ enum AppRoute {
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/',
     debugLogDiagnostics: true,
     redirect: (context, state) async {
       return null;

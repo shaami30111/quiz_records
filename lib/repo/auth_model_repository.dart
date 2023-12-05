@@ -13,8 +13,9 @@ class AuthRepository {
   final FirebaseFirestore _firestore;
   static String authPath(String id) => 'access_roles/$id';
 
-  Future<void> saveAuthModel(AuthModel authModel, User user) async {
-    return _firestore.doc(authPath(user.uid)).set(
+  Future<void> saveAuthModel(AuthModel authModel, String user) async {
+    print("before writing");
+    return _firestore.doc(authPath(user)).set(
       {
         "email": authModel.email,
         "role": authModel.userRole,

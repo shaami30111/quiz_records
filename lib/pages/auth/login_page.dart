@@ -28,7 +28,7 @@ class SignupPage extends ConsumerWidget {
 
       // Access the newly created user via userCredential.user
       User? user = userCredential.user;
-
+      var uid = userCredential.user?.uid;
       // You can add additional actions after successful sign-up
       print("Sign-up successful! User ID: ${user?.uid}");
       final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -36,12 +36,15 @@ class SignupPage extends ConsumerWidget {
         email: emailController.text,
         userRole: selectedRole,
       );
+      print("Before database");
 
       final success =
-          await ref.read(authControllerProvider.notifier).saveAuth(auth, user!);
+          await ref.read(authControllerProvider.notifier).saveAuth(auth, uid!);
       // show success msg to user, don't show msg on console
+      print(success);
       if (success) {
         // Inform the user that the quiz has been updated
+        print("Return from database");
         scaffoldMessenger.showSnackBar(
           SnackBar(
             content: Text(
