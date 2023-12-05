@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:quiz_records/localization/string_hardcoded.dart';
 
 import '../constants/app_sizes.dart';
-import '../routing.dart';
+import '../routing/routing.dart';
 
 
 /// Placeholder widget showing a message and CTA to go back to the home screen.

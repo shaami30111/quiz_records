@@ -5,10 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:quiz_records/common_widgets/async_value_ui.dart';
 import 'package:quiz_records/localization/string_hardcoded.dart';
 
-import '../common_widgets/empty_placeholder.dart';
+import '../../../common_widgets/empty_placeholder.dart';
 import '../controller/quiz_controller.dart';
-import '../repo/quiz_repository.dart';
-import '../routing.dart';
+import '../repositories/quiz_repository.dart';
+import '../../../routing/routing.dart';
 import '../widgets/quiz_card.dart';
 
 class QuizsPage extends ConsumerWidget {

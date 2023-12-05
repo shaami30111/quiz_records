@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/auth_model.dart';
 
+
 part 'auth_model_repository.g.dart';
 
 class AuthRepository {

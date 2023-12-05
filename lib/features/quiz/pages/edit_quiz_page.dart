@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiz_records/localization/string_hardcoded.dart';
 
-import '../../../common_widgets/empty_placeholder.dart';
+import '../../../../../common_widgets/empty_placeholder.dart';
 import '../model/quiz.dart';
 
-import '../repo/quiz_repository.dart';
+import '../repositories/quiz_repository.dart';
 import 'edit_quiz_page_content.dart';
 
 

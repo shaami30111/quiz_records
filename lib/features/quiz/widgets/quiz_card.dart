@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quiz_records/localization/string_hardcoded.dart';
 
-import '../common_widgets/alert_dialogs.dart';
+import '../../../common_widgets/alert_dialogs.dart';
 import '../controller/quiz_controller.dart';
 import '../model/quiz.dart';
-import '../routing.dart';
+import '../../../routing/routing.dart';
 
 class QuizCard extends StatelessWidget {
   const QuizCard({super.key, required this.quiz, required this.ref});

@@ -1,11 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/auth_model.dart';
-import '../repo/auth_model_repository.dart';
-import '../routing.dart';
+import '../repositories/auth_model_repository.dart';
+
 
 part 'auth_controller.g.dart';
 
