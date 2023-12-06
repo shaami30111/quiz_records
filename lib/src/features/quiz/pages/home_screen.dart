@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +13,11 @@ import '../../../routing/routing.dart';
 import '../widgets/quiz_card.dart';
 
 class QuizsPage extends ConsumerWidget {
-  const QuizsPage({super.key});
+  QuizsPage(
+    this.role, {
+    super.key,
+  });
+  String role;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,9 +28,16 @@ class QuizsPage extends ConsumerWidget {
     );
     // this provider is used to provide live list of quizs from firebase
     final streamQuizsList = ref.watch(streamQuizsListProvider);
+
     return Scaffold(
       appBar: AppBar(
         actions: [
+          role == "Teacher"
+              ? IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.admin_panel_settings),
+                )
+              : const SizedBox.shrink(),
           // add new quiz
           IconButton(
             onPressed: () {
@@ -52,6 +64,19 @@ class QuizsPage extends ConsumerWidget {
           error.toString(),
         ),
         loading: () => const CircularProgressIndicator(),
+      ),
+      floatingActionButton: IconButton(
+        onPressed: () async {
+          User? user = FirebaseAuth.instance.currentUser;
+
+          if (user != null) {
+            await FirebaseAuth.instance.signOut();
+            print('User successfully signed out');
+          } else {
+            print('No user is currently signed in');
+          }
+        },
+        icon: const Icon(Icons.logout),
       ),
     );
   }

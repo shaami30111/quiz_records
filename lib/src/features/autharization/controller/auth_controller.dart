@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../routing/routing.dart';
 import '../model/auth_model.dart';
 import '../repositories/auth_model_repository.dart';
-
 
 part 'auth_controller.g.dart';
 
@@ -20,6 +20,25 @@ class AuthController extends _$AuthController {
     final success = state.hasError == false;
     if (success) {
       print("contoller success");
+    }
+    return success;
+  }
+
+  Future<bool> signIn(String email, String password) async {
+    state = const AsyncValue.loading();
+
+    final authRepository = ref.read(authRepositoryProvider);
+    var result =
+        await AsyncValue.guard(() => authRepository.signIn(email, password));
+    final success = state.hasError == false;
+    if (success) {
+      // goto back screen
+      // ignore: avoid_manual_providers_as_generated_provider_dependency
+      String? role;
+      result.whenData((value) => role = value);
+      ref.read(goRouterProvider).goNamed(AppRoute.home.name, pathParameters: {
+        "role": role ?? "No Role",
+      });
     }
     return success;
   }

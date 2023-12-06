@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quiz_records/src/features/autharization/pages/login_page.dart';
 import 'package:quiz_records/src/features/quiz/pages/home_screen.dart';
 
-import '../features/autharization/pages/login_page.dart';
+import '../features/autharization/pages/signup_page.dart';
 import '../features/errors/not_found_page.dart';
 import '../features/quiz/pages/add_quiz.dart';
 import '../features/quiz/pages/edit_quiz_page.dart';
 
 enum AppRoute {
   signup,
+  login,
   home,
   quizs,
   quizAdd,
@@ -30,14 +32,31 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => SignupPage(),
       ),
       GoRoute(
-        path: '/home',
-        name: AppRoute.home.name,
-        builder: (context, state) => const QuizsPage(),
+        path: '/login',
+        name: AppRoute.login.name,
+        builder: (context, state) => LoginPage(),
       ),
       GoRoute(
-        path: '/quizs',
+        path: '/home:role',
+        name: AppRoute.home.name,
+        pageBuilder: (context, state) {
+          final role = state.pathParameters['role']!;
+          return MaterialPage(
+            fullscreenDialog: true,
+            child: QuizsPage(role),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/quizs:role',
         name: AppRoute.quizs.name,
-        builder: (context, state) => const QuizsPage(),
+        pageBuilder: (context, state) {
+          final role = state.pathParameters['role']!;
+          return MaterialPage(
+            fullscreenDialog: true,
+            child: QuizsPage(role),
+          );
+        },
         routes: [
           GoRoute(
             path: 'add',

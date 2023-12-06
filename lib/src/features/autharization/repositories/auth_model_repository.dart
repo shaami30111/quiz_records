@@ -4,7 +4,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/auth_model.dart';
 
-
 part 'auth_model_repository.g.dart';
 
 class AuthRepository {
@@ -23,6 +22,46 @@ class AuthRepository {
       },
       SetOptions(merge: true),
     );
+  }
+
+  Future<String> signIn(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      User user = userCredential.user!;
+      if (user != null) {
+        // Fetch the user's custom claims
+        IdTokenResult idTokenResult = await user.getIdTokenResult();
+        Map<String, dynamic>? claims = idTokenResult.claims;
+
+        // Check if the 'role' claim is present
+        if (claims != null && claims.containsKey('role')) {
+          // Extract the user's role from the claims
+          String role = claims['role'];
+
+          print('User has role: $role');
+          return role;
+        } else {
+          print('User does not have a role claim');
+          return "no role";
+        }
+      }
+      return "no role";
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        // Handle invalid user credentials
+        return "Invalid email or password. Please try again.";
+      } else {
+        // Handle other exceptions
+        return "Other Exceptions ${e.message}";
+      }
+    } catch (e) {
+      return "Error $e";
+    }
   }
 }
 
