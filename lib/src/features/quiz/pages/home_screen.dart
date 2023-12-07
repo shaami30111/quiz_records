@@ -17,7 +17,7 @@ class QuizsPage extends ConsumerWidget {
     this.role, {
     super.key,
   });
-  String role;
+  var role;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +32,7 @@ class QuizsPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          role == "Teacher"
+          role == 'true'
               ? IconButton(
                   onPressed: () {},
                   icon: const Icon(Icons.admin_panel_settings),
@@ -68,10 +68,10 @@ class QuizsPage extends ConsumerWidget {
       floatingActionButton: IconButton(
         onPressed: () async {
           User? user = FirebaseAuth.instance.currentUser;
-
           if (user != null) {
             await FirebaseAuth.instance.signOut();
             print('User successfully signed out');
+            context.goNamed(AppRoute.login.name);
           } else {
             print('No user is currently signed in');
           }

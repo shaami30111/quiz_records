@@ -18,13 +18,14 @@ class AuthRepository {
     return _firestore.doc(authPath(user)).set(
       {
         "email": authModel.email,
-        "role": authModel.userRole,
+        "role": authModel.role?.toJson(),
       },
       SetOptions(merge: true),
     );
   }
 
-  Future<String> signIn(String email, String password) async {
+  Future<List<Map<String, dynamic>>> signIn(
+      String email, String password) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -41,26 +42,139 @@ class AuthRepository {
         // Check if the 'role' claim is present
         if (claims != null && claims.containsKey('role')) {
           // Extract the user's role from the claims
-          String role = claims['role'];
+          Map<String, dynamic> role = claims['role'];
 
           print('User has role: $role');
-          return role;
+          return [
+            role,
+            {
+              "isLogged": true,
+            }
+          ];
         } else {
           print('User does not have a role claim');
-          return "no role";
+          return [
+            {
+              "role": "no role",
+            },
+            {
+              "isLogged": true,
+            }
+          ];
         }
       }
-      return "no role";
+      return [
+        {
+          "role": "no role",
+        },
+        {
+          "isLogged": false,
+        }
+      ];
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {
         // Handle invalid user credentials
-        return "Invalid email or password. Please try again.";
+        return [
+          {"isLogged": "Invalid email or password. Please try again."},
+          {
+            "isLogged": false,
+          }
+        ];
       } else {
         // Handle other exceptions
-        return "Other Exceptions ${e.message}";
+        return [
+          {"isLogged": "Other Exceptions ${e.message}"},
+          {
+            "isLogged": false,
+          }
+        ];
       }
     } catch (e) {
-      return "Error $e";
+      print(e);
+      return [
+        {"isLogged": "Error $e"},
+        {
+          "isLogged": false,
+        }
+      ];
+    }
+  }
+
+  static String authModelsPath() => 'access_roles';
+
+  Future<List<AuthModel>> futureAuthModelsList() async {
+    final ref = _authModelsRef();
+    final snapshot = await ref.get();
+    return snapshot.docs.map((docSnapshot) => (docSnapshot.data())).toList();
+  }
+
+  Stream<List<AuthModel>> streamAuthModelsList() {
+    final ref = _authModelsRef();
+    return ref.snapshots().map((snapshot) =>
+        snapshot.docs.map((docSnapshot) => (docSnapshot.data())).toList());
+  }
+
+  Future<AuthModel?> futureAuthModel(String userId) async {
+    final ref = _authModelRef(userId);
+    final snapshot = await ref.get();
+    return (snapshot.data());
+  }
+
+  Stream<AuthModel?> streamAuthModel(String userId) {
+    final ref = _authModelRef(userId);
+    return ref.snapshots().map((snapshot) => (snapshot.data()));
+  }
+
+  Future<void> updateAuthModel(AuthModel authModel, String userId) {
+    final ref = _authModelRef(userId);
+    return ref.set(authModel);
+  }
+
+  Future<void> deleteAuthModel(String userId) {
+    return _firestore.doc(authPath(userId)).delete();
+  }
+
+  DocumentReference<AuthModel> _authModelRef(String userId) =>
+      _firestore.doc(authPath(userId)).withConverter(
+            fromFirestore: (doc, _) => AuthModel.fromJson(doc.data()!),
+            toFirestore: (AuthModel authModel, options) => authModel.toJson(),
+          );
+
+  Query<AuthModel> _authModelsRef() => _firestore
+      .collection(authModelsPath())
+      .withConverter(
+        fromFirestore: (doc, _) => AuthModel.fromJson(doc.data()!),
+        toFirestore: (AuthModel authModel, options) => authModel.toJson(),
+      )
+      .orderBy('userId');
+
+  // Additional methods...
+
+  // Example search function
+  Future<List<AuthModel>> search(String query) async {
+    final authModelsList = await futureAuthModelsList();
+    return authModelsList
+        .where((authModel) =>
+            authModel.email!.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+
+  Future<bool> isUserAdmin(String userId) async {
+    final authModel = await futureAuthModel(userId);
+    return authModel?.role?.admin ?? false;
+  }
+
+  Future<bool> isUserModerator(String userId) async {
+    final authModel = await futureAuthModel(userId);
+    return authModel?.role?.moderator ?? false;
+  }
+
+  Future<void> updateRole(String userId, Role newRole) async {
+    final authModel = await futureAuthModel(userId);
+
+    if (authModel != null) {
+      authModel.role = newRole;
+      await updateAuthModel(authModel,userId);
     }
   }
 }
@@ -71,4 +185,28 @@ class AuthRepository {
 @Riverpod(keepAlive: true)
 AuthRepository authRepository(AuthRepositoryRef ref) {
   return AuthRepository(FirebaseFirestore.instance);
+}
+
+@riverpod
+Stream<List<AuthModel>> streamAuthModelsList(StreamAuthModelsListRef ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.streamAuthModelsList();
+}
+
+@riverpod
+Future<List<AuthModel>> futureAuthModelsList(FutureAuthModelsListRef ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.futureAuthModelsList();
+}
+
+@riverpod
+Stream<AuthModel?> streamAuthModel(StreamAuthModelRef ref, String userId) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.streamAuthModel(userId);
+}
+
+@riverpod
+Future<AuthModel?> futureAuthModel(FutureAuthModelRef ref, String userId) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.futureAuthModel(userId);
 }

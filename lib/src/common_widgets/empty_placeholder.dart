@@ -5,7 +5,6 @@ import 'package:quiz_records/src/localization/string_hardcoded.dart';
 import '../constants/app_sizes.dart';
 import '../routing/routing.dart';
 
-
 /// Placeholder widget showing a message and CTA to go back to the home screen.
 class EmptyPlaceholder extends StatelessWidget {
   const EmptyPlaceholder({
@@ -33,7 +32,7 @@ class EmptyPlaceholder extends StatelessWidget {
                   ),
                   gapH32,
                   TextButton(
-                    onPressed: () => context.goNamed(AppRoute.home.name),
+                    onPressed: () => context.goNamed(AppRoute.quizs.name),
                     child: Text('Go Home'.hardcoded),
                   )
                 ],

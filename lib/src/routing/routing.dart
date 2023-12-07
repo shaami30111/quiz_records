@@ -20,14 +20,14 @@ enum AppRoute {
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/login',
     debugLogDiagnostics: true,
     redirect: (context, state) async {
       return null;
     },
     routes: [
       GoRoute(
-        path: '/',
+        path: '/signup',
         name: AppRoute.signup.name,
         builder: (context, state) => SignupPage(),
       ),
@@ -37,10 +37,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => LoginPage(),
       ),
       GoRoute(
-        path: '/home:role',
+        path: '/home:admin',
         name: AppRoute.home.name,
         pageBuilder: (context, state) {
-          final role = state.pathParameters['role']!;
+          var role = state.pathParameters['admin'];
           return MaterialPage(
             fullscreenDialog: true,
             child: QuizsPage(role),
@@ -48,10 +48,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        path: '/quizs:role',
+        path: '/quizs',
         name: AppRoute.quizs.name,
         pageBuilder: (context, state) {
-          final role = state.pathParameters['role']!;
+          var role = state.pathParameters['admin'];
           return MaterialPage(
             fullscreenDialog: true,
             child: QuizsPage(role),

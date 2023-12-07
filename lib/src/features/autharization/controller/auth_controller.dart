@@ -24,22 +24,36 @@ class AuthController extends _$AuthController {
     return success;
   }
 
-  Future<bool> signIn(String email, String password) async {
+  Future<String> signIn(String email, String password) async {
     state = const AsyncValue.loading();
 
     final authRepository = ref.read(authRepositoryProvider);
     var result =
         await AsyncValue.guard(() => authRepository.signIn(email, password));
-    final success = state.hasError == false;
-    if (success) {
+    // final success = state.hasError == false;
+    var temp;
+
+    result.whenData((value) => temp = value[1]);
+    bool isLogged = temp['isLogged'];
+    if (isLogged) {
+      final success = state.hasError == false;
       // goto back screen
       // ignore: avoid_manual_providers_as_generated_provider_dependency
-      String? role;
-      result.whenData((value) => role = value);
-      ref.read(goRouterProvider).goNamed(AppRoute.home.name, pathParameters: {
-        "role": role ?? "No Role",
-      });
+      var role;
+      result.whenData((value) => role = value[0]);
+
+      print("inside controller:   $role");
+      ref.read(goRouterProvider).goNamed(
+        AppRoute.home.name,
+        pathParameters: {
+          "admin": role['admin'].toString(),
+        },
+      );
+      return temp['isLogged'].toString();
     }
-    return success;
+    String? errorValue;
+    result.whenData((value) => errorValue = value[0]['isLogged']);
+    state = const AsyncValue.data(null);
+    return errorValue ?? "Error!";
   }
 }
