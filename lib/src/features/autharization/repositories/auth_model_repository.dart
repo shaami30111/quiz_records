@@ -17,6 +17,7 @@ class AuthRepository {
     print("before writing");
     return _firestore.doc(authPath(user)).set(
       {
+        "userId": authModel.userId,
         "email": authModel.email,
         "role": authModel.role?.toJson(),
       },
@@ -24,8 +25,7 @@ class AuthRepository {
     );
   }
 
-  Future<List<Map<String, dynamic>>> signIn(
-      String email, String password) async {
+  Future<bool> signIn(String email, String password) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -34,69 +34,18 @@ class AuthRepository {
       );
 
       User user = userCredential.user!;
-      if (user != null) {
-        // Fetch the user's custom claims
-        IdTokenResult idTokenResult = await user.getIdTokenResult();
-        Map<String, dynamic>? claims = idTokenResult.claims;
-
-        // Check if the 'role' claim is present
-        if (claims != null && claims.containsKey('role')) {
-          // Extract the user's role from the claims
-          Map<String, dynamic> role = claims['role'];
-
-          print('User has role: $role');
-          return [
-            role,
-            {
-              "isLogged": true,
-            }
-          ];
-        } else {
-          print('User does not have a role claim');
-          return [
-            {
-              "role": "no role",
-            },
-            {
-              "isLogged": true,
-            }
-          ];
-        }
-      }
-      return [
-        {
-          "role": "no role",
-        },
-        {
-          "isLogged": false,
-        }
-      ];
+      return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {
         // Handle invalid user credentials
-        return [
-          {"isLogged": "Invalid email or password. Please try again."},
-          {
-            "isLogged": false,
-          }
-        ];
+        return false;
       } else {
         // Handle other exceptions
-        return [
-          {"isLogged": "Other Exceptions ${e.message}"},
-          {
-            "isLogged": false,
-          }
-        ];
+        return false;
       }
     } catch (e) {
       print(e);
-      return [
-        {"isLogged": "Error $e"},
-        {
-          "isLogged": false,
-        }
-      ];
+      return false;
     }
   }
 
@@ -174,7 +123,7 @@ class AuthRepository {
 
     if (authModel != null) {
       authModel.role = newRole;
-      await updateAuthModel(authModel,userId);
+      await updateAuthModel(authModel, userId);
     }
   }
 }

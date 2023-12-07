@@ -38,9 +38,10 @@ class SignupPage extends ConsumerWidget {
       final scaffoldMessenger = ScaffoldMessenger.of(context);
       Role role = Role(
         admin: selectedRole == "Student" ? false : true,
-        moderator: selectedRole == "Student" ? true : false,
+        moderator: true,
       );
       AuthModel auth = AuthModel(
+        userId: uid,
         email: emailController.text,
         role: role,
       );

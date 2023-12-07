@@ -82,7 +82,7 @@ class LoginPage extends ConsumerWidget {
             passwordController.text,
           );
       // show success msg to user, don't show msg on console
-      if (success == "true" || success == "no role") {
+      if (success) {
         // Inform the user that the login was success
         scaffoldMessenger.showSnackBar(
           SnackBar(
@@ -95,7 +95,7 @@ class LoginPage extends ConsumerWidget {
         scaffoldMessenger.showSnackBar(
           SnackBar(
             content: Text(
-              success.hardcoded,
+              success.toString(),
             ),
           ),
         );

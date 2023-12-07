@@ -14,6 +14,17 @@ migrate_working_dir/
 *.iml
 *.ipr
 *.iws
+*.ps1
+*.js
+*.mjs
+*.map
+*.d.ts
+*.jst
+*.def
+*.json
+.eslintrc.js
+functions/*.json
+node_modules/
 .idea/
 
 # The .vscode folder contains launch configuration and tasks you configure in
@@ -41,3 +52,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+functions/.eslintrc.js

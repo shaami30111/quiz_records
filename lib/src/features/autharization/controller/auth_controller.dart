@@ -24,36 +24,65 @@ class AuthController extends _$AuthController {
     return success;
   }
 
-  Future<String> signIn(String email, String password) async {
+  Future<bool> signIn(String email, String password) async {
     state = const AsyncValue.loading();
 
     final authRepository = ref.read(authRepositoryProvider);
     var result =
         await AsyncValue.guard(() => authRepository.signIn(email, password));
     // final success = state.hasError == false;
-    var temp;
+    bool isLogged = false;
 
-    result.whenData((value) => temp = value[1]);
-    bool isLogged = temp['isLogged'];
+    result.whenData((value) => isLogged = value);
+
     if (isLogged) {
       final success = state.hasError == false;
       // goto back screen
       // ignore: avoid_manual_providers_as_generated_provider_dependency
-      var role;
-      result.whenData((value) => role = value[0]);
 
-      print("inside controller:   $role");
       ref.read(goRouterProvider).goNamed(
-        AppRoute.home.name,
-        pathParameters: {
-          "admin": role['admin'].toString(),
-        },
-      );
-      return temp['isLogged'].toString();
+            AppRoute.home.name,
+          );
+      return isLogged;
     }
-    String? errorValue;
-    result.whenData((value) => errorValue = value[0]['isLogged']);
     state = const AsyncValue.data(null);
-    return errorValue ?? "Error!";
+    return false;
+  }
+
+  Future<bool> deleteUserRole(String userId) async {
+    state = const AsyncLoading();
+    final authRepository = ref.read(authRepositoryProvider);
+    state =
+        await AsyncValue.guard(() => authRepository.deleteAuthModel(userId));
+    return state.hasError == false;
+  }
+
+  Future<bool> isUserAdmin(String userId) async {
+    state = const AsyncLoading();
+    final authRepository = ref.read(authRepositoryProvider);
+    state = await AsyncValue.guard(() => authRepository.isUserAdmin(userId));
+    return state.hasError == false;
+  }
+
+  Future<bool> isUserModerator(String userId) async {
+    state = const AsyncLoading();
+    final authRepository = ref.read(authRepositoryProvider);
+    state =
+        await AsyncValue.guard(() => authRepository.isUserModerator(userId));
+    return state.hasError == false;
+  }
+
+  Future<bool> updateRole(String userId, Role newRole) async {
+    state = const AsyncLoading();
+    final authRepository = ref.read(authRepositoryProvider);
+    state = await AsyncValue.guard(
+        () => authRepository.updateRole(userId, newRole));
+    final success = state.hasError == false;
+    if (success) {
+      // goto back screen
+      // ignore: avoid_manual_providers_as_generated_provider_dependency
+      ref.read(goRouterProvider).pop();
+    }
+    return success;
   }
 }

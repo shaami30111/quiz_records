@@ -1,79 +1,59 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quiz_records/src/common_widgets/async_value_ui.dart';
+import 'package:quiz_records/src/features/autharization/controller/auth_controller.dart';
 import 'package:quiz_records/src/features/autharization/repositories/auth_model_repository.dart';
 import 'package:quiz_records/src/localization/string_hardcoded.dart';
+import 'package:quiz_records/src/routing/routing.dart';
 
 import '../../../common_widgets/empty_placeholder.dart';
-import '../../autharization/controller/auth_controller.dart';
-import '../controller/quiz_controller.dart';
-import '../repositories/quiz_repository.dart';
-import '../../../routing/routing.dart';
-import '../widgets/quiz_card.dart';
+import '../widgets/auth_card.dart';
 
-class QuizsPage extends ConsumerWidget {
-  QuizsPage({
+class UsersPage extends ConsumerWidget {
+  UsersPage({
     super.key,
   });
-
-  checkAdmin(BuildContext context, WidgetRef ref, String userId) async {
-    return await ref.read(authControllerProvider.notifier).isUserAdmin(userId);
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // this listener is used to show alert dialog on error, while quiz is deleting
     ref.listen<AsyncValue>(
-      quizControllerProvider,
+      authControllerProvider,
       (_, state) => state.showAlertDialogOnError(context),
     );
     // this provider is used to provide live list of quizs from firebase
-    final streamQuizsList = ref.watch(streamQuizsListProvider);
+    final streamauthsList = ref.watch(streamAuthModelsListProvider);
     var user = FirebaseAuth.instance.currentUser!;
-    final streamAuthmodel = ref.watch(futureAuthModelProvider(user.uid));
 
     // final role = checkAdmin(context, ref, user.uid);
 
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          streamAuthmodel.when(
-            data: (accessData) => accessData!.role!.admin == true
-                ? IconButton(
-                    onPressed: () {
-                      context.goNamed(AppRoute.users.name);
-                    },
-                    icon: const Icon(Icons.admin_panel_settings),
-                  )
-                : const SizedBox.shrink(),
-            error: (error, trace) => Text(
-              error.toString(),
-            ),
-            loading: () => const CircularProgressIndicator(),
-          ),
+        title: Text("User Access Control".hardcoded),
+        // actions: [
 
-          // add new quiz
-          IconButton(
-            onPressed: () {
-              context.goNamed(AppRoute.quizAdd.name);
-            },
-            icon: const Icon(Icons.add),
-          ),
-        ],
+        //   // add new quiz
+        //   IconButton(
+        //     onPressed: () {
+        //       context.goNamed(AppRoute.quizAdd.name);
+        //     },
+        //     icon: const Icon(Icons.add),
+        //   ),
+        // ],
       ),
-      body: streamQuizsList.when(
-        data: (quizsList) => quizsList.isEmpty
+      body: streamauthsList.when(
+        data: (accessList) => accessList.isEmpty
             ? EmptyPlaceholder(
-                message: 'No Quizs'.hardcoded,
+                message: 'No User Access Registered'.hardcoded,
               )
             : ListView.builder(
-                itemCount: quizsList.length,
+                itemCount: accessList.length,
                 // note: always create card in a separate widget file
-                itemBuilder: (ctx, index) => QuizCard(
-                  quiz: quizsList[index],
+                itemBuilder: (ctx, index) => AuthCard(
+                  authModel: accessList[index],
+                  userId: accessList[index].userId!,
                   ref: ref,
                 ),
               ),

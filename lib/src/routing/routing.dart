@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quiz_records/src/features/autharization/pages/edit_role.dart';
 import 'package:quiz_records/src/features/autharization/pages/login_page.dart';
+import 'package:quiz_records/src/features/autharization/pages/show_user.dart';
 import 'package:quiz_records/src/features/quiz/pages/home_screen.dart';
 
 import '../features/autharization/pages/signup_page.dart';
@@ -13,6 +15,8 @@ enum AppRoute {
   signup,
   login,
   home,
+  users,
+  userEdit,
   quizs,
   quizAdd,
   quizEdit,
@@ -37,26 +41,32 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => LoginPage(),
       ),
       GoRoute(
-        path: '/home:admin',
+        path: '/home',
         name: AppRoute.home.name,
-        pageBuilder: (context, state) {
-          var role = state.pathParameters['admin'];
-          return MaterialPage(
-            fullscreenDialog: true,
-            child: QuizsPage(role),
-          );
-        },
+        builder: (context, state) => QuizsPage(),
+      ),
+      GoRoute(
+        path: '/users',
+        name: AppRoute.users.name,
+        builder: (context, state) => UsersPage(),
+        routes: [
+          GoRoute(
+            path: 'editUser/:userId',
+            name: AppRoute.userEdit.name,
+            pageBuilder: (context, state) {
+              final userId = state.pathParameters['userId']!;
+              return MaterialPage(
+                fullscreenDialog: true,
+                child: EditRolePage(userId: userId),
+              );
+            },
+          ),
+        ],
       ),
       GoRoute(
         path: '/quizs',
         name: AppRoute.quizs.name,
-        pageBuilder: (context, state) {
-          var role = state.pathParameters['admin'];
-          return MaterialPage(
-            fullscreenDialog: true,
-            child: QuizsPage(role),
-          );
-        },
+        builder: (context, state) => QuizsPage(),
         routes: [
           GoRoute(
             path: 'add',

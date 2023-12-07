@@ -1,17 +1,20 @@
 class AuthModel {
+  String? userId;
   String? email;
   Role? role;
 
-  AuthModel({this.email, this.role});
+  AuthModel({this.email, this.role, this.userId});
 
   AuthModel.fromJson(Map<String, dynamic> json) {
     email = json['email'];
+    userId = json['userId'];
     role = json['role'] != null ? Role.fromJson(json['role']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['email'] = email;
+    data['userId'] = userId;
     if (role != null) {
       data['role'] = role!.toJson();
     }
